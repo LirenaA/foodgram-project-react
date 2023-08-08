@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status, viewsets
-from users.models import CustomUser
+from users.models import CustomUser, Follow
 from api.permissions import CustomUserPermissions, IsAuthor, IsAuthorOrReadOnly, CanViewAnyObject
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
@@ -40,3 +40,15 @@ class CustomUserViewset(viewsets.ModelViewSet):
             {'status': 'Пароль изменен'},
             status=status.HTTP_204_NO_CONTENT
         )
+        
+    @action(
+        detail=False,
+        permission_classes=(IsAuthenticated,))
+    def subscriptions(self, request):
+        queryset = Subscribe.objects.filter(user=request.user)
+        pages = self.paginate_queryset(queryset)
+        serializer = SubscribeSerializer(
+            pages,
+            many=True,
+            context={'request': request},)
+        return self.get_paginated_response(serializer.data)

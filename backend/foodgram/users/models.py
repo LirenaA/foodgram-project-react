@@ -14,3 +14,25 @@ class CustomUser(AbstractUser):
         return self.email
     class Meta:
         db_table = 'user'
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Подписчик'
+    )
+    author = models.ForeignKey(
+        CustomUser, null=True,
+        on_delete=models.CASCADE,
+        related_name='followed',
+        verbose_name='Автор',
+        help_text='Автор рецепта'
+    )
+
+    class Meta:
+        verbose_name = 'Подписка'
+        constraints = [models.UniqueConstraint(
+            fields=['author', 'user'],
+            name='unique_object'
+        )]

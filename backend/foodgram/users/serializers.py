@@ -1,6 +1,13 @@
-from users.models import CustomUser
+from users.models import CustomUser, Follow
+from recipes.models import Recipe
 from rest_framework import serializers, status, validators
 from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+from rest_framework.validators import ValidationError
+
+
+User = get_user_model()
+
 
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор регистрации/получения информации пользователя."""
@@ -41,3 +48,5 @@ class PasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 {'status': 'Поля не должны совпадать'})
         return value
+    
+

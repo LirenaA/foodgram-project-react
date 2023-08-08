@@ -43,6 +43,14 @@ class Recipe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     ingredients = models.ManyToManyField('Ingredient', 
                                          through='RecipeIngredient')
+    image = models.ImageField(
+        verbose_name='Картинка',
+        upload_to='recipe/images/'
+    )
+    pub_date = models.DateTimeField(
+        verbose_name='Дата публикации',
+        auto_now_add=True
+    )
     
 class Ingredient(models.Model):
     name = models.CharField(max_length=200)
