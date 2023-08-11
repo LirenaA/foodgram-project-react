@@ -1,26 +1,19 @@
-from rest_framework import permissions
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 
-class CanViewAnyObject(permissions.BasePermission):
-    def has_permission(self, request, view, obj):
-        return request.user.is_authenticated and request.method == 'GET'
+class IsAuthorOrReadOnly(BasePermission):
 
-class CustomUserPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return (request.method in SAFE_METHODS
+                or request.user.is_authenticated)
+
+    def has_object_permission(self, request, view, obj):
+        return obj.author == request.user
+
+
+class CustomUserPermissions(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if view.action == 'retrieve':
             return request.user.is_authenticated
         return True
-
-
-class IsAuthor(permissions.BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_authenticated and request.user == obj.author
-
-
-class IsAuthorOrReadOnly(permissions.BasePermission):
-
-    def has_object_permission(self, request, view, obj):
-        return (obj.author == request.user
-                or request.method in permissions.SAFE_METHODS)

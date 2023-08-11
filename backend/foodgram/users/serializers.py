@@ -1,31 +1,35 @@
-from users.models import CustomUser, Follow
-from recipes.models import Recipe
-from rest_framework import serializers, status, validators
-from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from rest_framework.validators import ValidationError
-
+from djoser.serializers import UserCreateSerializer
+from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
-    """Сериализатор регистрации/получения информации пользователя."""
-    
-    def create(self, validated_data):
-        user = CustomUser(
-            email=validated_data['email'],
-            username=validated_data['username'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
-    
+class CustomUserCreateSerializer(UserCreateSerializer):
+    email = serializers.EmailField(
+        max_length=254,
+        validators=[
+            UniqueValidator(queryset=User.objects.all(),
+                            message='такой email уже существует')
+        ]
+    )
+    username = serializers.CharField(
+        max_length=150,
+        validators=[
+            UniqueValidator(queryset=User.objects.all(),
+                            message='такой username уже существует')
+        ]
+    )
+    password = serializers.CharField(
+        max_length=150,
+        write_only=True
+    )
+    first_name = serializers.CharField(max_length=150)
+    last_name = serializers.CharField(max_length=150)
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = (
             'email',
             'id',
@@ -34,19 +38,27 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
             'password',
         )
-        extra_kwargs = {
-            'password': {'write_only': True},
-        }
 
-class PasswordSerializer(serializers.Serializer):
-    """Сериализатор смены пароля."""
-    new_password = serializers.CharField(max_length=150)
-    current_password = serializers.CharField(max_length=150)
 
-    def validate(self, value):
-        if value['new_password'] == value['current_password']:
-            raise serializers.ValidationError(
-                {'status': 'Поля не должны совпадать'})
-        return value
-    
+class UserSerializer(serializers.ModelSerializer):
+    is_subscribed = serializers.SerializerMethodField()
 
+    class Meta:
+        model = User
+        fields = (
+            'email',
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_subscribed'
+        )
+
+    def get_is_subscribed(self, obj):
+        request = self.context['request']
+        if not request.user.is_authenticated:
+            return False
+        if obj.followed.filter(user=request.user).exists():
+            return True
+        else:
+            return False
