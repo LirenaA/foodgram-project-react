@@ -13,7 +13,7 @@ def create_shopping_list(ingredients, txt_file):
     text = ['Список ингредиентов: \n \n']
 
     for ingredient in ingredients:
-        amount = ingredient['total']
+        amount = ingredient['amount']
         text.append(f'{ingredient["name"]}  - {amount} '
                     f' ({ingredient["measurement_unit"]})\n')
     text = ''.join(text)
