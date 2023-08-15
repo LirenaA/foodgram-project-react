@@ -1,7 +1,9 @@
 Описание
 Проект "Foodgram" – это "продуктовый помощник". На этом сервисе авторизированные пользователи могут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд. Для неавторизированных пользователей доступны просмотр рецептов и страниц авторов.
 
-Как запустить проект на боевом сервере:
+С проектом можно ознакомиться по ссылке: http://lirengram.ddns.net/
+
+Как запустить проект на сервере:
 Установить на сервере docker и docker-compose. Скопировать на сервер файлы docker-compose.yaml и default.conf:
 
 scp docker-compose.yml <логин*на*сервере>@<IP*сервера>:/home/<логин*на*сервере>/docker-compose.yml
@@ -49,7 +51,7 @@ sudo docker-compose exec web python manage.py load*data_csv --path <путь*к*
 Как запустить проект локально в контейнерах:
 Клонировать репозиторий и перейти в него в командной строке:
 
-git@github.com:mariyabykova/foodgram-project-react.git cd foodgram-project-react
+git@github.com:lirenaa/foodgram-project-react.git cd foodgram-project-react
 
 Запустить docker-compose:
 
@@ -73,7 +75,7 @@ http://localhost/
 Как запустить проект локально:
 Клонировать репозиторий и перейти в него в командной строке:
 
-git@github.com:mariyabykova/foodgram-project-react.git cd foodgram-project-react
+git@github.com:lirenaa/foodgram-project-react.git cd foodgram-project-react
 
 Создать и активировать виртуальное окружение:
 
