@@ -48,13 +48,13 @@ class RecipeViewSet(ModelViewSet):
             .values('name').annotate(amount=Sum('ingredient_amount__amount'))
             .values('name', 'measurement_unit', 'amount')
         )
-        patch = path = (f'{settings.MEDIA_ROOT}\\send_ingredients\\'
-                    f'{request.user.username}_list_of_buy.txt')
+        patch = (f'{settings.MEDIA_ROOT}\\send_ingredients\\'
+                 f'{request.user.username}_list_of_buy.txt')
         try:
             create_shopping_list(ingredients, patch)
         except (KeyError, IOError) as err:
             return Response({'error': f'Ошибка: {err}'},
-                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return FileResponse(open(patch, 'rb'), status=status.HTTP_200_OK)
 
     @action(
