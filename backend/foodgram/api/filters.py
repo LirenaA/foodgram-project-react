@@ -1,4 +1,5 @@
 from django_filters.rest_framework import FilterSet, filters
+
 from recipes.models import Recipe, Tag
 
 
@@ -19,12 +20,12 @@ class RecipeFilter(FilterSet):
 
     def filter_is_favorited(self, queryset, name, value):
         user = self.request.user
-        if value and not user.is_anonymous:
+        if value and user.is_authenticated:
             return queryset.filter(favorites__user=user)
         return queryset
 
     def filter_is_in_shopping_cart(self, queryset, name, value):
         user = self.request.user
-        if value and not user.is_anonymous:
+        if value and user.is_authenticated:
             return queryset.filter(carts__user=user)
         return queryset

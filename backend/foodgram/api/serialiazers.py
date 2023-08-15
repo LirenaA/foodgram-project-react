@@ -13,13 +13,13 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = '__all__'
+        fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = '__all__'
+        fields = ('id', 'name', 'measurement_unit')
 
 
 class ShortRecipeSerializer(serializers.ModelSerializer):
@@ -47,13 +47,9 @@ class SubscriberSerializer(serializers.ModelSerializer):
         )
 
     def get_is_subscribed(self, obj):
-        request = self.context['request']
-        if not request.user.is_authenticated:
-            return False
-        if obj.followed.filter(user=request.user).exists():
-            return True
-        else:
-            return False
+        user = self.context['request'].user
+        return (user.is_authenticated
+            and obj.followed.filter(user=user).exists())
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -73,7 +69,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
     measurement_unit = serializers.CharField(
         source='ingredient.measurement_unit', read_only=True
     )
-    amount = serializers.IntegerField(min_value=1)
+    amount = serializers.IntegerField(min_value=1, max_value=5000)
 
     class Meta:
         model = RecipeIngredient
@@ -88,7 +84,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     is_favorited = serializers.SerializerMethodField()
     author = UserSerializer(read_only=True)
     image = Base64ImageField()
-
+    
     class Meta:
         model = Recipe
         fields = (
@@ -105,23 +101,17 @@ class RecipeSerializer(serializers.ModelSerializer):
         )
 
     def get_is_favorited(self, obj):
-        if self.context['request'].user in obj.in_favorites.all():
-            return True
-        else:
-            return False
+        return obj.favorites.filter(user=self.context['request'].user).exists()
 
     def get_is_in_shopping_cart(self, obj):
-        if self.context['request'].user in obj.in_carts.all():
-            return True
-        else:
-            return False
+        return obj.carts.filter(user=self.context['request'].user).exists()
 
 
 class RecipeCreateSerializer(RecipeSerializer):
     tags = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Tag.objects.all()
     )
-
+    cooking_time = serializers.IntegerField(min_value=1, max_value=10000)
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredient_amount')
         recipe = super().create(validated_data)

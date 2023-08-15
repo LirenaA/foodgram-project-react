@@ -109,4 +109,4 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     queryset = Ingredient.objects.all()
     filter_backends = [SearchFilter]
-    search_fields = ['^name']
+    search_fields = ('^name',)
