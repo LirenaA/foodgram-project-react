@@ -5,6 +5,7 @@ from api.serialiazers import (IngredientSerializer, RecipeCreateSerializer,
                               RecipeSerializer, ShortRecipeSerializer,
                               TagSerializer)
 from api.utils import create_shopping_list
+from foodgram import settings
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import FileResponse
@@ -17,7 +18,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from foodgram import settings
+
 
 User = get_user_model()
 
