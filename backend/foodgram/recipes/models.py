@@ -15,7 +15,7 @@ class Tag(models.Model):
     color = ColorField(
         default='#FF0000',
         verbose_name='Цвет'
-        )
+    )
     slug = models.SlugField(
         max_length=200,
         unique=True,
@@ -38,8 +38,8 @@ class Recipe(models.Model):
         unique=True,
         verbose_name='Название',
     )
-    cooking_time =  models.PositiveSmallIntegerField(
-         validators=[
+    cooking_time = models.PositiveSmallIntegerField(
+        validators=[
             MinValueValidator(1),
             MaxValueValidator(10000)
         ],
@@ -77,7 +77,7 @@ class Recipe(models.Model):
         related_name='recipes_in_favorite',
         verbose_name='Рецепт в избранном'
     )
-    
+
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
@@ -87,7 +87,7 @@ class Ingredient(models.Model):
     name = models.CharField(
         max_length=200,
         verbose_name='Название ингредиента'
-        )
+    )
     measurement_unit = models.CharField(
         max_length=200,
         verbose_name='Единица измерения')
@@ -97,11 +97,10 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
 
-
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
-        Recipe, 
-        on_delete=models.CASCADE, 
+        Recipe,
+        on_delete=models.CASCADE,
         related_name='ingredient_amount',
         verbose_name='Рецепт'
     )
@@ -112,14 +111,14 @@ class RecipeIngredient(models.Model):
         verbose_name='Ингредиент'
     )
     amount = models.PositiveSmallIntegerField(
-         validators=[
+        validators=[
             MinValueValidator(1),
             MaxValueValidator(5000)
         ],
         verbose_name='Количество ингредиента'
     )
 
-    
+
 class UserRecipeAbstract(models.Model):
     user = models.ForeignKey(
         User,

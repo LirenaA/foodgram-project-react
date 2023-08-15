@@ -48,7 +48,7 @@ class SubscriberSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
         return (user.is_authenticated
-            and obj.followed.filter(user=user).exists())
+                and obj.followed.filter(user=user).exists())
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
@@ -83,7 +83,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     is_favorited = serializers.SerializerMethodField()
     author = UserSerializer(read_only=True)
     image = Base64ImageField()
-    
+
     class Meta:
         model = Recipe
         fields = (
@@ -110,6 +110,7 @@ class RecipeCreateSerializer(RecipeSerializer):
     tags = serializers.PrimaryKeyRelatedField(
         many=True, queryset=Tag.objects.all()
     )
+
     cooking_time = serializers.IntegerField(min_value=1, max_value=10000)
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredient_amount')
