@@ -5,7 +5,6 @@ from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from rest_framework import serializers
 from users.serializers import UserSerializer
 
-
 User = get_user_model()
 
 
