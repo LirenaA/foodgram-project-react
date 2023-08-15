@@ -8,7 +8,6 @@ from api.utils import add_ingredients
 
 User = get_user_model()
 
-
 class TagSerializer(serializers.ModelSerializer):
 
     class Meta:

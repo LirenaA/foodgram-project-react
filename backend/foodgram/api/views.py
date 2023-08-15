@@ -1,4 +1,3 @@
-from foodgram import settings
 from api.filters import RecipeFilter
 from api.paginations import PageNumberCustomPagination
 from api.permissions import IsAuthorOrReadOnly
@@ -18,6 +17,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from foodgram import settings
 
 User = get_user_model()
 
