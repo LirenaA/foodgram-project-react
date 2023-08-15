@@ -1,15 +1,3 @@
-from django.contrib.auth import get_user_model
-from django.db.models import Sum
-from django.http import FileResponse
-from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-
 from api.filters import RecipeFilter
 from api.paginations import PageNumberCustomPagination
 from api.permissions import IsAuthorOrReadOnly
@@ -17,8 +5,20 @@ from api.serialiazers import (IngredientSerializer, RecipeCreateSerializer,
                               RecipeSerializer, ShortRecipeSerializer,
                               TagSerializer)
 from api.utils import create_shopping_list
-from foodgram import settings
+from django.contrib.auth import get_user_model
+from django.db.models import Sum
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import Ingredient, Recipe, Tag
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
+from foodgram import settings
 
 User = get_user_model()
 

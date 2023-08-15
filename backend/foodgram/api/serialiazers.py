@@ -1,9 +1,8 @@
+from api.utils import add_ingredients
 from django.contrib.auth import get_user_model
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers
-
-from api.utils import add_ingredients
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
+from rest_framework import serializers
 from users.serializers import UserSerializer
 
 User = get_user_model()
