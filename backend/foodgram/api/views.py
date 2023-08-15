@@ -3,6 +3,8 @@ from django.db.models import Sum
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from foodgram import settings
+from recipes.models import Ingredient, Recipe, Tag
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
@@ -17,9 +19,9 @@ from api.serialiazers import (IngredientSerializer, RecipeCreateSerializer,
                               RecipeSerializer, ShortRecipeSerializer,
                               TagSerializer)
 from api.utils import create_shopping_list
-from foodgram import settings
-from recipes.models import Ingredient, Recipe, Tag
+
 User = get_user_model()
+
 
 # В доке нет фильтрации
 class TagViewSet(ReadOnlyModelViewSet):

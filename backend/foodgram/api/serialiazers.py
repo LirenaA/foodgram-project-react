@@ -1,9 +1,10 @@
-from api.utils import add_ingredients
 from django.contrib.auth import get_user_model
 from drf_extra_fields.fields import Base64ImageField
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from rest_framework import serializers
 from users.serializers import UserSerializer
+
+from api.utils import add_ingredients
 
 User = get_user_model()
 
@@ -112,6 +113,7 @@ class RecipeCreateSerializer(RecipeSerializer):
     )
 
     cooking_time = serializers.IntegerField(min_value=1, max_value=10000)
+
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredient_amount')
         recipe = super().create(validated_data)
