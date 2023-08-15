@@ -3,10 +3,10 @@ from drf_extra_fields.fields import Base64ImageField
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from rest_framework import serializers
 from users.serializers import UserSerializer
-
 from api.utils import add_ingredients
 
 User = get_user_model()
+
 
 class TagSerializer(serializers.ModelSerializer):
 
