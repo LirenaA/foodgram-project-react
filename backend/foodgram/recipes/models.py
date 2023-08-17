@@ -5,7 +5,6 @@ from django.core.validators import (MaxValueValidator, MinValueValidator,
 from django.db import models
 from foodgram.settings import STR_LEN
 
-
 User = get_user_model()
 
 
@@ -172,4 +171,3 @@ class Cart(UserRecipeAbstract):
             name='unique_carts'
         )]
         default_related_name = 'carts'
-
