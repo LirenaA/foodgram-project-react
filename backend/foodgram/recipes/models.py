@@ -172,4 +172,4 @@ class Cart(UserRecipeAbstract):
             name='unique_carts'
         )]
         default_related_name = 'carts'
- 
+
