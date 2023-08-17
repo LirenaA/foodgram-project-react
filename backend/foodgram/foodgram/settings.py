@@ -165,4 +165,3 @@ LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'Europe/Moscow'
 
 STR_LEN = 50
-

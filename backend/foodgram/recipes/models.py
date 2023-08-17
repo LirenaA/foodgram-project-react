@@ -8,6 +8,7 @@ from foodgram.settings import STR_LEN
 
 User = get_user_model()
 
+
 class Tag(models.Model):
     name = models.CharField(
         max_length=200,
@@ -103,7 +104,7 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
-    
+
     def __str__(self):
         return self.name[:STR_LEN]
 
@@ -128,10 +129,10 @@ class RecipeIngredient(models.Model):
         ],
         verbose_name='Количество ингредиента'
     )
-    
+
     def __str__(self):
         return self.recipe[:STR_LEN]
-    
+
 
 class UserRecipeAbstract(models.Model):
     user = models.ForeignKey(
@@ -147,7 +148,7 @@ class UserRecipeAbstract(models.Model):
 
     class Meta:
         abstract = True
-    
+
 
 class Favorite(UserRecipeAbstract):
 
@@ -171,4 +172,4 @@ class Cart(UserRecipeAbstract):
             name='unique_carts'
         )]
         default_related_name = 'carts'
-        
+ 
