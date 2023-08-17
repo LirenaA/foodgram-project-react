@@ -88,6 +88,7 @@ jobs:
             sudo docker compose stop 
             sudo docker compose rm -f backend
             sudo docker compose pull backend
+            rm docker.env
             touch docker.env 
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> docker.env 
             echo DB_NAME=${{ secrets.DB_NAME }} >> docker.env 
