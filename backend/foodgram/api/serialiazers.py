@@ -125,3 +125,10 @@ class RecipeCreateSerializer(RecipeSerializer):
             recipe.ingredients.clear()
             return add_ingredients(recipe, ingredients)
         return recipe
+    
+    def validate_ingredients(self, ingredients):
+        ingredients_tuple = tuple(item.get('id') for item in ingredients)
+        if len(ingredients) != len(ingredients_tuple):
+            raise serializers.ValidationError(
+                'Каждый ингредиент указывается один раз!')
+        return ingredients

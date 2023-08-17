@@ -6,12 +6,13 @@ from recipes.models import (Cart, Favorite, Ingredient, Recipe,
 
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
+    min_num = 1
     extra = 1
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id', 'author', 'in_favorites')
+    list_display = ('name', 'id', 'author')
     readonly_fields = ('in_favorites',)
     list_filter = ('author', 'name', 'tags',)
     inlines = (RecipeIngredientInline,)

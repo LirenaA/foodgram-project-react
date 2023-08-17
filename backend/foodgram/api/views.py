@@ -14,7 +14,7 @@ from foodgram import settings
 from recipes.models import Ingredient, Recipe, Tag
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
@@ -31,9 +31,10 @@ class TagViewSet(ReadOnlyModelViewSet):
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = PageNumberCustomPagination
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     filterset_class = RecipeFilter
     permission_classes = (IsAuthorOrReadOnly,)
+    ordering = ('-pub_date',)
 
     def get_serializer_class(self):
         if self.action == 'create' or self.action == 'partial_update':

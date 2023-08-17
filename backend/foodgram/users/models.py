@@ -42,3 +42,6 @@ class Follow(models.Model):
             fields=['author', 'user'],
             name='unique_object'
         )]
+
+    def __str__(self):
+        return self.user

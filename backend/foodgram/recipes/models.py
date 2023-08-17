@@ -1,10 +1,12 @@
 from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (MaxValueValidator, MinValueValidator,
+                                    RegexValidator)
 from django.db import models
+from foodgram.settings import STR_LEN
+
 
 User = get_user_model()
-
 
 class Tag(models.Model):
     name = models.CharField(
@@ -14,12 +16,16 @@ class Tag(models.Model):
     )
     color = ColorField(
         default='#FF0000',
-        verbose_name='Цвет'
+        verbose_name='Цвет',
+        unique=True,
+        validators=[RegexValidator(
+            '^#([A-F0-9]{6}|[A-F0-9]{3})$',
+            'Неверный формат',
+        )]
     )
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        blank=False,
     )
 
     class Meta:
@@ -28,14 +34,13 @@ class Tag(models.Model):
         ordering = ('id',)
 
     def __str__(self):
-        return self.name[:50]
+        return self.name[:STR_LEN]
 
 
 class Recipe(models.Model):
     tags = models.ManyToManyField(Tag)
     name = models.CharField(
         max_length=200,
-        unique=True,
         verbose_name='Название',
     )
     cooking_time = models.PositiveSmallIntegerField(
@@ -82,6 +87,9 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
+    def __str__(self):
+        return self.name[:STR_LEN]
+
 
 class Ingredient(models.Model):
     name = models.CharField(
@@ -95,6 +103,9 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+    
+    def __str__(self):
+        return self.name[:STR_LEN]
 
 
 class RecipeIngredient(models.Model):
@@ -117,7 +128,10 @@ class RecipeIngredient(models.Model):
         ],
         verbose_name='Количество ингредиента'
     )
-
+    
+    def __str__(self):
+        return self.recipe[:STR_LEN]
+    
 
 class UserRecipeAbstract(models.Model):
     user = models.ForeignKey(
@@ -133,7 +147,7 @@ class UserRecipeAbstract(models.Model):
 
     class Meta:
         abstract = True
-
+    
 
 class Favorite(UserRecipeAbstract):
 
@@ -157,3 +171,4 @@ class Cart(UserRecipeAbstract):
             name='unique_carts'
         )]
         default_related_name = 'carts'
+        
