@@ -144,9 +144,10 @@ class UserRecipeAbstract(models.Model):
         verbose_name='Рецепт',
         on_delete=models.CASCADE,
     )
-
-    def __str__(self):
-        return f'{self.recipe.name}'
+    
+    class Meta:
+        abstract = True
+        
 
 
 class Favorite(UserRecipeAbstract):
