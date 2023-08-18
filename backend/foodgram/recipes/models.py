@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from django.core.validators import (MaxValueValidator, MinValueValidator,
                                     RegexValidator)
 from django.db import models
-from foodgram.settings import STR_LEN
 
 User = get_user_model()
 
@@ -20,7 +19,7 @@ class Tag(models.Model):
         unique=True,
         validators=[RegexValidator(
             '^#([A-F0-9]{6}|[A-F0-9]{3})$',
-            'Неверный формат',
+            'Неверный формат: следует указать цвет в hex-формате',
         )]
     )
     slug = models.SlugField(
@@ -34,7 +33,7 @@ class Tag(models.Model):
         ordering = ('id',)
 
     def __str__(self):
-        return self.name[:STR_LEN]
+        return f'{self.name}'
 
 
 class Recipe(models.Model):
@@ -88,7 +87,7 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
     def __str__(self):
-        return self.name[:STR_LEN]
+        return f'{self.name}'
 
 
 class Ingredient(models.Model):
@@ -105,7 +104,7 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return self.name[:STR_LEN]
+        return f'{self.name}'
 
 
 class RecipeIngredient(models.Model):
@@ -129,8 +128,14 @@ class RecipeIngredient(models.Model):
         verbose_name='Количество ингредиента'
     )
 
+    class Meta:
+        abstract = True
+        verbose_name = 'Связь рецепт-ингредиент'
+        verbose_name_plural = 'Связи рецепт-ингредиент'
+
     def __str__(self):
-        return self.recipe[:STR_LEN]
+        return (f'{self.ingredient.name} - {self.amount}'
+                f' {self.ingredient.measurement_unit}')
 
 
 class UserRecipeAbstract(models.Model):
@@ -147,6 +152,11 @@ class UserRecipeAbstract(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = 'Абстрактный рецепт'
+        verbose_name_plural = 'Абстрактные рецепты'
+
+    def __str__(self):
+        return f'{self.recipe.name}'
 
 
 class Favorite(UserRecipeAbstract):
@@ -160,6 +170,9 @@ class Favorite(UserRecipeAbstract):
         )]
         default_related_name = 'favorites'
 
+    def __str__(self):
+        return f'Избранные {self.user}'
+
 
 class Cart(UserRecipeAbstract):
 
@@ -171,3 +184,6 @@ class Cart(UserRecipeAbstract):
             name='unique_carts'
         )]
         default_related_name = 'carts'
+
+    def __str__(self):
+        return f'Корзина {self.user}'

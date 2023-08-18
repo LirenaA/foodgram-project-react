@@ -1,4 +1,4 @@
-
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -13,7 +13,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ('first_name', 'last_name', 'username', )
 
     def __str__(self):
-        return self.email
+        return f'{self.first_name} {self.last_name}'
 
     class Meta:
         db_table = 'user'
@@ -36,12 +36,16 @@ class Follow(models.Model):
         help_text='Автор рецепта'
     )
 
+    def clean(self):
+        if self.user == self.author:
+            raise ValidationError('Нельзя подписываться на самого себя')
     class Meta:
         verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
         constraints = [models.UniqueConstraint(
             fields=['author', 'user'],
             name='unique_object'
         )]
 
     def __str__(self):
-        return self.user
+        return f'{self.user} <-> {self.author}'
