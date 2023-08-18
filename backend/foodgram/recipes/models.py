@@ -128,11 +128,6 @@ class RecipeIngredient(models.Model):
         verbose_name='Количество ингредиента'
     )
 
-    class Meta:
-        abstract = True
-        verbose_name = 'Связь рецепт-ингредиент'
-        verbose_name_plural = 'Связи рецепт-ингредиент'
-
     def __str__(self):
         return (f'{self.ingredient.name} - {self.amount}'
                 f' {self.ingredient.measurement_unit}')
@@ -149,11 +144,6 @@ class UserRecipeAbstract(models.Model):
         verbose_name='Рецепт',
         on_delete=models.CASCADE,
     )
-
-    class Meta:
-        abstract = True
-        verbose_name = 'Абстрактный рецепт'
-        verbose_name_plural = 'Абстрактные рецепты'
 
     def __str__(self):
         return f'{self.recipe.name}'
