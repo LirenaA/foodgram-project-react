@@ -1,13 +1,24 @@
 from django.contrib import admin
 from django.contrib.admin import display
+from django.core.exceptions import ValidationError
+from django.forms import BaseInlineFormSet
 from recipes.models import (Cart, Favorite, Ingredient, Recipe,
                             RecipeIngredient, Tag)
 
 
+class IngredientRecipeFormset(BaseInlineFormSet):
+    def clean(self):
+        if hasattr(self, 'cleaned_data'):
+            for data in self.cleaned_data:
+                if data.get('recipe') and not data.get('DELETE'):
+                    return super(IngredientRecipeFormset, self).clean()
+        raise ValidationError('Необходимо указать ингредиент')
+
+
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
-    min_num = 1
-    extra = 1
+    extra = 0
+    formset = IngredientRecipeFormset
 
 
 @admin.register(Recipe)

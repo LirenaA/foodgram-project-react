@@ -19,7 +19,8 @@ class Tag(models.Model):
         unique=True,
         validators=[RegexValidator(
             '^#([A-F0-9]{6}|[A-F0-9]{3})$',
-            'Неверный формат: следует указать цвет в hex-формате',
+            'Неверный формат: следует указать цвет в hex-формате '
+            'c использованием заглавных букв',
         )]
     )
     slug = models.SlugField(
@@ -33,7 +34,7 @@ class Tag(models.Model):
         ordering = ('id',)
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class Recipe(models.Model):
@@ -85,9 +86,13 @@ class Recipe(models.Model):
     class Meta:
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
+        constraints = [models.UniqueConstraint(
+            fields=['author', 'text'],
+            name='unique_recipe'
+        )]
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class Ingredient(models.Model):
@@ -104,7 +109,7 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class RecipeIngredient(models.Model):
